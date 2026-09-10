@@ -6,6 +6,7 @@
 <title>Luminelle Lab — Cards</title>
 <meta name="theme-color" content="#fafaf8">
 
+<!-- Poppins : 4 poids, swap pour la vitesse -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -16,11 +17,11 @@
 :root{
   --bg:#fafaf8;
   --card:#ffffff;
-  --ink:#0e1a22;
+  --ink:#0e1a22;                 /* bleu-noir clinique, pas un noir sec */
   --ink-soft:rgba(14,26,34,.60);
   --ink-faint:rgba(14,26,34,.20);
   --accent:#2bb3f3;
-  --accent-deep:#0f8ac6;
+  --accent-deep:#0f8ac6;         /* accent foncé pour les micro-textes */
   --accent-tint:rgba(43,179,243,.09);
   --line:rgba(14,26,34,.08);
   --ease:cubic-bezier(.22,.61,.21,1);
@@ -31,7 +32,7 @@ body{
   font-family:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
-  padding:15px 0;
+  padding:15px 0; /* espace 15px en haut et en bas */
 }
 
 /* ============ GRILLE DE CARDS ============ */
@@ -41,38 +42,21 @@ body{
   padding-inline:clamp(20px,4vw,40px);
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  grid-auto-rows:1fr; /* ✅ FIX : force toutes les cards à la même hauteur */
   gap:clamp(16px,2vw,22px);
 }
-
-/* Tablette */
-@media (max-width:1023px){ 
+@media (max-width:1023px){ .cards{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:619px){
   .cards{
-    grid-template-columns:repeat(2,1fr);
-    gap:18px;
-  }
-}
-
-/* Mobile : garde 2x2 mais ajuste le padding */
-@media (max-width:619px){ 
-  .cards{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:1fr;   /* ✅ mobile : 1 colonne (1 teht 1) */
     gap:12px;
-    padding-inline:12px;
+    padding-inline:16px;
   }
 }
 
-/* Très petit mobile : passe en 1 colonne pour lisibilité */
-@media (max-width:420px){ 
-  .cards{
-    grid-template-columns:1fr;
-    gap:14px;
-  }
-}
-
-/* ============ CARD ============ */
+/* ============ CARD — esprit laboratoire dermatologique ============ */
 .card{
   background-color:var(--card);
+  /* halo subtil façon eau thermale, coin supérieur */
   background-image:radial-gradient(120% 90% at 0% 0%,rgba(43,179,243,.07),transparent 55%);
   border:1px solid var(--line);
   border-radius:20px;
@@ -80,7 +64,7 @@ body{
   display:flex;
   flex-direction:column;
   align-items:flex-start;
-  height:100%; /* ✅ FIX : prend toute la hauteur de la cellule grid */
+  height:100%;
   transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .45s var(--ease);
   animation:rise .7s var(--ease) backwards;
 }
@@ -100,33 +84,35 @@ body{
   .card:hover .card__num{color:var(--accent)}
 }
 
-/* ============ Ajustements mobile ============ */
+/* ============ MOBILE : card compacte horizontale (height sghira) ============ */
 @media (max-width:619px){
   .card{
-    padding:18px 16px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    grid-template-areas:
+      "icon  title num"
+      "icon  desc  num"
+      "claim claim claim";
+    column-gap:14px;
+    align-items:start;
+    padding:16px 18px 12px;
     border-radius:16px;
   }
+  .card__top{display:contents} /* icône + numéro directement dans la grille */
   .card__icon{
-    width:44px;
-    height:44px;
+    grid-area:icon;
+    width:44px;height:44px;
     border-radius:12px;
+    align-self:center; /* centrée face au titre + desc */
   }
   .card__icon svg{width:22px;height:22px}
-  .card__num{font-size:1.4rem}
-  .card__title{font-size:.98rem}
-  .card__desc{
-    font-size:.82rem;
-    margin-top:6px;
-    margin-bottom:18px;
-  }
-  .card__claim{
-    font-size:.62rem;
-    letter-spacing:.12em;
-  }
-  .card__top{margin-bottom:16px}
+  .card__num{grid-area:num;font-size:1.35rem}
+  .card__title{grid-area:title;font-size:1rem;line-height:1.3;align-self:center}
+  .card__desc{grid-area:desc;margin:2px 0 12px;font-size:.83rem;line-height:1.6}
+  .card__claim{grid-area:claim;padding-top:10px;font-size:.62rem;letter-spacing:.12em}
 }
 
-/* ============ TOP : icône + numéro ============ */
+/* Ligne supérieure : icône + numéro de soin */
 .card__top{
   width:100%;
   display:flex;
@@ -138,11 +124,10 @@ body{
   width:52px;height:52px;
   border-radius:15px;
   background:var(--accent-tint);
-  box-shadow:inset 0 0 0 1px rgba(43,179,243,.16);
+  box-shadow:inset 0 0 0 1px rgba(43,179,243,.16); /* anneau interne, finition scellée */
   color:var(--accent-deep);
   display:grid;place-items:center;
   transition:transform .45s var(--ease);
-  flex-shrink:0;
 }
 .card__icon svg{width:26px;height:26px;display:block}
 .card__num{
@@ -168,10 +153,9 @@ body{
   font-weight:400;
   color:var(--ink-soft);
   line-height:1.7;
-  flex-grow:1; /* ✅ FIX : pousse le claim en bas uniformément */
 }
 
-/* ============ CLAIM ============ */
+/* Claim clinique en pied de card */
 .card__claim{
   margin-top:auto;
   width:100%;
@@ -196,8 +180,10 @@ body{
 </head>
 <body>
 
+<!-- ============ CARDS : POURQUOI LUMINELLE LAB ============ -->
 <section class="cards" aria-label="Pourquoi Luminelle Lab">
 
+  <!-- 01 · Formules réfléchies -->
   <article class="card">
     <div class="card__top">
       <span class="card__icon" aria-hidden="true">
@@ -217,6 +203,7 @@ body{
     </p>
   </article>
 
+  <!-- 02 · Une routine cohérente -->
   <article class="card">
     <div class="card__top">
       <span class="card__icon" aria-hidden="true">
@@ -237,6 +224,7 @@ body{
     </p>
   </article>
 
+  <!-- 03 · La simplicité -->
   <article class="card">
     <div class="card__top">
       <span class="card__icon" aria-hidden="true">
@@ -254,6 +242,7 @@ body{
     </p>
   </article>
 
+  <!-- 04 · La transparence -->
   <article class="card">
     <div class="card__top">
       <span class="card__icon" aria-hidden="true">
