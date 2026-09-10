@@ -44,8 +44,10 @@ body{
   grid-template-columns:repeat(4,1fr);
   gap:clamp(16px,2vw,22px);
 }
+/* Tablette : 2x2 */
 @media (max-width:1023px){ .cards{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:619px){ .cards{grid-template-columns:1fr} }
+/* Mobile : reste en 2x2 (plus de passage à 1 colonne) */
+/* @media (max-width:619px){ .cards{grid-template-columns:1fr} } <-- supprimé */
 
 /* ============ CARD — esprit laboratoire dermatologique ============ */
 .card{
